@@ -2,6 +2,8 @@
 ; parameter <how many sectors to read> is in dx
 
 disk_load:
+  pusha
+
   push dx         ; preserve dx for error checking later 
 
   mov ah, 0x02    ; BIOS read sector function
@@ -10,13 +12,6 @@ disk_load:
   mov ch, 0x00    ; select Cylinder
   mov dh, 0x00    ; select Track, set Head (base of 0)
   mov cl, 0x02    ; select Sector (base of 1)
-
-
-  ; set the address that we'd like BIOS to read the sectors to, which BIOS expects to find in ES:BX
-  mov bx, 0xa00
-  mov es, bx
-  mov bx, 0x1234
-  ; so the data will be read to 0xa000:0x1234, which the CPU translates to physical address 0xa1234
 
   int 0x13    ; BIOS interrupt to do the actual read
 
@@ -31,6 +26,7 @@ disk_load:
   mov bx, SUCCESS_MSG
   call print_string
 
+  popa
   ret
 
 
