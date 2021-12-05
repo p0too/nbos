@@ -3,18 +3,32 @@
 
   [org 0x7c00]
 
-  ; set the address that we'd like BIOS to read the sectors to, which BIOS expects to find in ES:BX
-  mov bx, 0xa00
-  mov es, bx
-  mov bx, 0x1234
-  ; so the data will be read to 0xa000:0x1234, which the CPU translates to physical address 0xa1234
+  mov [BOOT_DRIVE], dl    ; BIOS stores boot drive in dl, so save it for later
 
-  mov dx, 0x02    ; argument <no. of sectors to read>
+  mov bp, 0x8000    ; set up stack at safer address
+  mov sp, bp
+
+  mov bx, 0x9000   ; load 2 sectors to 0x0000(ES):0x9000(BX)
+  mov dh, 2
+  mov dl, [BOOT_DRIVE]
   call disk_load
+
+  mov dx, [0x9000]    ; print the first loaded word, expected 0xdada
+  call print_hex
+
+  mov dx, [0x9000 + 512]    ; print first word from second loaded sector, expected 0xface
+  call print_hex
+
+  jmp $
 
 
 %include "print_string.asm"
+%include "print_hex.asm"
 %include "disk_load.asm"
+
+
+BOOT_DRIVE:
+  db 0
 
   times 510-($-$$) db 0
   dw 0xaa55
