@@ -1,8 +1,11 @@
 run: os-image
 	qemu-system-i386 os-image
 
-kernel.bin: kernel.o
-	ld -melf_i386 -o kernel.bin -Ttext 0x1000 kernel.o --oformat binary
+kernel.bin: kernel_entry.o kernel.o
+	ld -melf_i386 -o kernel.bin -Ttext 0x1000 kernel_entry.o kernel.o --oformat binary
+
+kernel_entry.o: kernel_entry.asm
+	nasm kernel_entry.asm -f elf -o kernel_entry.o
 
 kernel.o: kernel.c
 	gcc -m32 -ffreestanding -fno-pie -c kernel.c -o kernel.o
