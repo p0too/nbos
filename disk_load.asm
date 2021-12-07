@@ -42,4 +42,4 @@ DISK_ERROR_MSG:
   db "disk read error",0
 
 SUCCESS_MSG:
-  db "success",0
+  db "disk_load: success",0
