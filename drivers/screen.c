@@ -1,5 +1,6 @@
 #include "screen.h"
 #include "ports.h"
+#include "../kernel/util.h"
 
 void print_char(char character, int col, int row, char attribute_byte)
 {
@@ -11,7 +12,12 @@ void print_char(char character, int col, int row, char attribute_byte)
 
   int offset;
   if(col>=0 && row>=0) {
-    offset = get_screen_offset(col, row);
+    //offset = get_screen_offset(col, row);
+    /* don't need above line cause we've already set cursor to
+     * appropriate position in print_at function so we can just call
+     * get_cursor() to get the offset.
+     */
+    offset = get_cursor();
   } else {
     offset = get_cursor();
   }
@@ -25,14 +31,14 @@ void print_char(char character, int col, int row, char attribute_byte)
   }
 
   offset += 2;
-  //offset = handle_scrolling(offset);
+  offset = handle_scrolling(offset);
 
   set_cursor(offset);
 }
 
 int get_screen_offset(int col, int row)
 {
-  return (2 * (row * 80 + col));
+  return (2 * (row * MAX_COLS + col));
 }
 
 int get_cursor()
@@ -85,4 +91,28 @@ void clear_screen()
   }
 
   set_cursor(get_screen_offset(0,0));
+}
+
+int handle_scrolling(int cursor_offset)
+{
+  if(cursor_offset < MAX_ROWS * MAX_COLS * 2) {
+    return cursor_offset;
+  }
+
+  int i;
+  for(i=1; i<MAX_ROWS; i++) {
+    memory_copy((char*) get_screen_offset(0,i) + VIDEO_ADDRESS,
+                (char*) get_screen_offset(0,i-1) + VIDEO_ADDRESS,
+                MAX_COLS * 2
+                );
+  }
+
+  char* last_line = (char*) get_screen_offset(0, MAX_ROWS-1) + VIDEO_ADDRESS;
+  for(i=0; i<MAX_COLS*2; i++) {
+    last_line[i] = 0;
+  }
+
+  cursor_offset -= 2*MAX_COLS;
+
+  return cursor_offset;
 }

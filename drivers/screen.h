@@ -20,5 +20,4 @@ void print(char *message);
 
 void clear_screen();
 
-// TODO:
-// void scroll_screen();
+int handle_scrolling(int cursor_offset);
