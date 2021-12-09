@@ -6,16 +6,16 @@ OBJ = ${C_SOURCES:.c=.o}
 all: os-image
 
 run: all
-	qemu-system-i386 os-image
+	qemu-system-i386 -fda os-image
 
 os-image: boot/boot_sect.bin kernel.bin
 	cat boot/boot_sect.bin kernel.bin > os-image
 
 kernel.bin: kernel/kernel_entry.o ${OBJ}
-	ld -melf_i386 -o $@ -Ttext 0x1000 $^ --oformat binary
+	i386-elf-ld -o $@ -Ttext 0x1000 $^ --oformat binary
 
 %.o: %.c ${HEADERS}
-	gcc -m32 -ffreestanding -fno-pie -c $< -o $@
+	i386-elf-gcc -ffreestanding -c $< -o $@
 
 %.o: %.asm
 	nasm $< -f elf -o $@
