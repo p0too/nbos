@@ -3,13 +3,13 @@ HEADERS = $(wildcard kernel/*.h drivers/*.h)
 
 OBJ = ${C_SOURCES:.c=.o}
 
-all: os-image
+all: os-image.bin
 
 run: all
-	qemu-system-i386 -fda os-image
+	qemu-system-i386 -fda os-image.bin
 
-os-image: boot/boot_sect.bin kernel.bin
-	cat boot/boot_sect.bin kernel.bin > os-image
+os-image.bin: boot/boot_sect.bin kernel.bin
+	cat boot/boot_sect.bin kernel.bin > os-image.bin
 
 kernel.bin: kernel/kernel_entry.o ${OBJ}
 	i386-elf-ld -o $@ -Ttext 0x1000 $^ --oformat binary
@@ -24,5 +24,5 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 	nasm -f bin -I './boot/' $< -o $@
 
 clean:
-	rm -f os-image *.bin *.dis *.o
+	rm -f *.bin *.dis *.o
 	rm -f boot/*.bin kernel/*.o drivers/*.o
