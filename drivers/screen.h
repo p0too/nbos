@@ -1,3 +1,6 @@
+#ifndef SCREEN_H
+#define SCREEN_H
+
 #define VIDEO_ADDRESS 0xb8000
 #define MAX_ROWS 25
 #define MAX_COLS 80
@@ -21,3 +24,5 @@ void print(char *message);
 void clear_screen();
 
 int handle_scrolling(int cursor_offset);
+
+#endif
