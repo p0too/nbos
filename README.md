@@ -7,3 +7,4 @@
   - osdev by Nick Blundell
   - https://wiki.osdev.org
   - www.osdever.net
+  - www.jamesmolloy.co.uk

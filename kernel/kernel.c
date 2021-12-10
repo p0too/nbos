@@ -1,7 +1,10 @@
 #include "../drivers/screen.h"
+#include "../cpu/idt.h"
 
 void main()
 {
+  setup_idt();
+
   clear_screen();
 
   int i;
@@ -15,5 +18,7 @@ void main()
   print(msg);
 
   print("\nsuccessfully scrolled..");
+
+  __asm__ __volatile__ ("int $0x2");
 }
 
