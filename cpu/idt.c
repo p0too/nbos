@@ -1,4 +1,5 @@
 #include "idt.h"
+#include "../drivers/ports.h"
 
 /* kernel calls this function to set up idt */
 void setup_idt()
@@ -65,6 +66,44 @@ void populate_idt()
   set_idt_entry(29 ,(u32_t) isr29);
   set_idt_entry(30 ,(u32_t) isr30);
   set_idt_entry(31 ,(u32_t) isr31);
+
+  /* on booting, default interrupt mappings are IRQ 0..7 -> INT 0x8..0xF and
+   * IRQ 8..15 -> INT 0x70..0x77. This causes conflict with cpu exceptions and
+   * fault signals.
+   * So, Remap the PICs so that IRQs 0..15 correspond to ISRs 32..47 
+   */
+  port_byte_out(0x20, 0x11);
+  port_byte_out(0xA0, 0x11);
+
+  port_byte_out(0x21, 0x20);
+  port_byte_out(0xA1, 0x28);
+
+  port_byte_out(0x21, 0x04);
+  port_byte_out(0xA1, 0x02);
+
+  port_byte_out(0x21, 0x01);
+  port_byte_out(0xA1, 0x01);
+
+  port_byte_out(0x21, 0x0);
+  port_byte_out(0xA1, 0x0);
+
+  /* IRQ */
+  set_idt_entry(IRQ0, (u32_t) irq0);
+  set_idt_entry(IRQ1, (u32_t) irq1);
+  set_idt_entry(IRQ2, (u32_t) irq2);
+  set_idt_entry(IRQ3, (u32_t) irq3);
+  set_idt_entry(IRQ4, (u32_t) irq4);
+  set_idt_entry(IRQ5, (u32_t) irq5);
+  set_idt_entry(IRQ6, (u32_t) irq6);
+  set_idt_entry(IRQ7, (u32_t) irq7);
+  set_idt_entry(IRQ8, (u32_t) irq8);
+  set_idt_entry(IRQ9, (u32_t) irq9);
+  set_idt_entry(IRQ10, (u32_t) irq10);
+  set_idt_entry(IRQ11, (u32_t) irq11);
+  set_idt_entry(IRQ12, (u32_t) irq12);
+  set_idt_entry(IRQ13, (u32_t) irq13);
+  set_idt_entry(IRQ14, (u32_t) irq14);
+  set_idt_entry(IRQ15, (u32_t) irq15);
 
 }
 
