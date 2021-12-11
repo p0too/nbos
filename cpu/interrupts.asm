@@ -68,6 +68,9 @@ global isr31
 
 
 
+; interrupt numbers 8, 10, 11, 12, 13, 14 push error code
+; so we don't need to push dummy error code
+
 ;0 - Division by zero exception
 isr0:
   cli                 ; disable interrupts
@@ -127,7 +130,6 @@ isr7:
 ;8 - Double fault (pushes an error code)
 isr8:
   cli                 
-  push byte 0         
   push byte 8         
   jmp isr_common_stub 
 
@@ -141,35 +143,30 @@ isr9:
 ;10 - Bad TSS (pushes an error code)
 isr10:
   cli                 
-  push byte 0         
   push byte 10         
   jmp isr_common_stub 
 
 ;11 - Segment not present (pushes an error code)
 isr11:
   cli
-  push byte 0
   push byte 11
   jmp isr_common_stub
 
 ;12 - Stack fault (pushes an error code)
 isr12:
   cli
-  push byte 0
   push byte 12
   jmp isr_common_stub
 
 ;13 - General protection fault (pushes an error code)
 isr13:
   cli
-  push byte 0
   push byte 13
   jmp isr_common_stub
 
 ;14 - Page fault (pushes an error code)
 isr14:
   cli
-  push byte 0
   push byte 14
   jmp isr_common_stub
 
