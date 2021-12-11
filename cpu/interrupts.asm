@@ -14,6 +14,7 @@ isr_common_stub:
   mov gs, ax
 
   ; 2. Call C handler
+  ; arguments are on the stack
   call isr_handler
 
   ; 3. Restore state

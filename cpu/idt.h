@@ -5,6 +5,7 @@
 
 #define KERNEL_CS 0x08
 
+/* Each idt entry is 8-bytes */
 struct idt_entry_struct
 {
   u16_t base_lo;  // lower 16-bits of handler function address
@@ -46,7 +47,9 @@ void populate_idt();
 void setup_idt();
 
 
-// the first 32 interrupts must be mapped and non-null
+/* the first 32 interrupts must be mapped and non-null.
+ * the following are defined in interrupts.asm
+ */
 extern void isr0();
 extern void isr1();
 extern void isr2();
