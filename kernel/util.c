@@ -1,4 +1,5 @@
 #include "util.h"
+#include "../drivers/screen.h"
 
 void memory_copy(char* source, char* dest, int no_bytes)
 {
@@ -36,4 +37,18 @@ int strlen(char s[]) {
     int i = 0;
     while (s[i] != '\0') ++i;
     return i;
+}
+
+void append_char_to_string(char n, char s[], int s_size)
+{
+  int len = strlen(s);
+  if(len < s_size - 2) {
+    s[len] = n;
+    s[len+1] = '\0';
+  } else {    /* check buffer overflow */
+    print("\ninfo: resetting keyboard buffer.. \n");
+    len = 0;
+    s[len] = n;
+    s[len+1] = '\0';
+  }
 }
