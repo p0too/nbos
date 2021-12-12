@@ -25,4 +25,7 @@ void clear_screen();
 
 int handle_scrolling(int cursor_offset);
 
+/* print backspace */
+void print_backspace();
+
 #endif

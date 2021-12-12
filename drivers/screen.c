@@ -116,3 +116,14 @@ int handle_scrolling(int cursor_offset)
 
   return cursor_offset;
 }
+
+void print_backspace()
+{
+  int new_offset = get_cursor() - 2;
+  set_cursor(new_offset);
+
+  char str[2] = {' ', '\0'};
+  print(str);
+
+  set_cursor(new_offset);
+}

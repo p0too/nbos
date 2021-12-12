@@ -10,6 +10,8 @@
 #define SC_MAX 57
 #define KEY_BUFFER_MAX_SIZE 16
 
+#define BACKSPACE 0x0e
+
 static char key_buffer[KEY_BUFFER_MAX_SIZE];
 
 const char scancode_to_char[] = { '?', '?', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
@@ -19,6 +21,7 @@ const char scancode_to_char[] = { '?', '?', '1', '2', '3', '4', '5', '6', '7', '
   'B', 'N', 'M', ',', '.', '/', '?', '?', '?', ' '
 };
 
+
 static void keyboard_callback(registers_t reg)
 {
   u8_t scancode = port_byte_in(0x60);
@@ -27,11 +30,18 @@ static void keyboard_callback(registers_t reg)
   if(scancode > SC_MAX)
     return;
 
-  char letter = scancode_to_char[(int) scancode];
-  append_char_to_string(letter, key_buffer, KEY_BUFFER_MAX_SIZE);
+  /* handle Backspace */
+  if(scancode == BACKSPACE) {
+    if(backspace(key_buffer)) {
+      print_backspace();
+    }
+  } else {
+    char letter = scancode_to_char[(int) scancode];
+    append_char_to_string(letter, key_buffer, KEY_BUFFER_MAX_SIZE);
 
-  char str[2] = {letter, '\0'};
-  print(str);
+    char str[2] = {letter, '\0'};
+    print(str);
+  }
 }
 
 void init_keyboard()

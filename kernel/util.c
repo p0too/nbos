@@ -52,3 +52,14 @@ void append_char_to_string(char n, char s[], int s_size)
     s[len+1] = '\0';
   }
 }
+
+int backspace(char buffer[])
+{
+  int len = strlen(buffer);
+  if(len > 0) {
+    buffer[len-1] = '\0';
+    return 1;
+  } else {
+    return 0;
+  }
+}

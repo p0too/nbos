@@ -9,4 +9,7 @@ int strlen(char s[]);
 /* to populate keyboard buffer */
 void append_char_to_string(char n, char s[], int s_size);
 
+/* implement backspace functionality */
+int backspace(char buffer[]);
+
 #endif
