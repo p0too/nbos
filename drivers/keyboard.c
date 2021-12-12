@@ -8,7 +8,7 @@
 
 
 #define SC_MAX 57
-#define KEY_BUFFER_MAX_SIZE 16
+#define KEY_BUFFER_MAX_SIZE 256
 
 #define BACKSPACE 0x0e
 
