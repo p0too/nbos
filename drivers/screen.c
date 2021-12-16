@@ -108,8 +108,8 @@ int handle_scrolling(int cursor_offset)
   }
 
   char* last_line = (char*) get_screen_offset(0, MAX_ROWS-1) + VIDEO_ADDRESS;
-  for(i=0; i<MAX_COLS*2; i++) {
-    last_line[i] = 0;
+  for(i=0; i<MAX_COLS*2; i+=2) {
+    last_line[i] = 0x0;
   }
 
   cursor_offset -= 2*MAX_COLS;
