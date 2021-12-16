@@ -2,6 +2,7 @@
 #include "../cpu/idt.h"
 #include "../drivers/timer.h"
 #include "../drivers/keyboard.h"
+#include "../drivers/mouse.h"
 
 void main()
 {
@@ -15,5 +16,9 @@ void main()
 
   // keyboard interrupt
   init_keyboard();
+
+  // mouse interrupt, IRQ12
+  init_mouse();
+
 }
 
